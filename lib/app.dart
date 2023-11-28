@@ -2,6 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:recipe/home.dart';
 import 'package:recipe/search.dart';
+import 'package:recipe/styles/theme_style.dart';
+import 'package:provider/provider.dart';
+
+import 'providers/app_provider.dart';
+
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: context.watch<AppProvider>().themeMode,
+      title: 'Flutter Demo',
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+}
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});

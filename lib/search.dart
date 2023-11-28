@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:recipe/providers/app_provider.dart';
+import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -39,6 +41,31 @@ class _SearchState extends State<Search> {
           ),
         )
       ]),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              context.read<AppProvider>().changeTherme(false);
+            },
+            tooltip: 'Light',
+            child: const Icon(Icons.abc),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              context.read<AppProvider>().changeTherme(true);
+            },
+            tooltip: 'Dark',
+            child: const Icon(Icons.ac_unit),
+          ),
+          const SizedBox(
+            height: 45,
+          ),
+        ],
+      ),
     );
   }
 }
