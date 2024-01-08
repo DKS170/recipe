@@ -12,7 +12,9 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<AppProvider>().applyTheme();
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: context.watch<AppProvider>().themeMode,
@@ -37,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int _counter = 0;
   List<Widget> _buildScreens() => [
-        Home(),
+        const Home(),
         const Search(),
         Home(),
         Home(),

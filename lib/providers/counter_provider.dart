@@ -5,26 +5,28 @@ import 'package:recipe/services/api.dart';
 import '../models/category.dart';
 
 class CounterProvider extends ChangeNotifier {
-  int counter = 0;
-  Color color = Colors.red;
-  double height = 300.0;
+  Color color = const Color.fromARGB(255, 255, 255, 255);
+  double height = 200.0;
+
   List<MealModel>? meals;
   List<CategoryModel>? categories;
 
   bool isLoading = false;
 
   void incrementCounter() {
-    counter++;
     color = Colors.amber;
-    height = 300;
+    height = 200;
     notifyListeners();
   }
 
-  void decrementCounter() {
-    counter--;
-    color = Colors.orange;
-    height = 600;
-    notifyListeners();
+  Widget roundedBox() {
+    return Container(
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      height: height,
+    );
   }
 
   setStatus(value) {

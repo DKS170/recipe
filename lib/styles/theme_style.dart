@@ -20,7 +20,7 @@ ThemeData lightTheme = ThemeData(
 ThemeData darkTheme = ThemeData(
   textTheme: const TextTheme(
     displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-    bodyLarge: TextStyle(fontSize: 28, color: Colors.black),
+    bodyLarge: TextStyle(fontSize: 18, color: Colors.black),
   ),
   appBarTheme: const AppBarTheme(
     color: Colors.black87,
@@ -31,5 +31,5 @@ ThemeData darkTheme = ThemeData(
       brightness: Brightness.dark,
       background: Colors.black54,
       onSurface: Colors.amber,
-      onBackground: Colors.black87),
+      onBackground: Colors.black54),
 );

@@ -3,7 +3,6 @@ import 'package:recipe/app.dart';
 import 'package:recipe/providers/app_provider.dart';
 import 'package:recipe/styles/theme_style.dart';
 import 'package:provider/provider.dart';
-
 import 'providers/counter_provider.dart';
 
 void main() {
