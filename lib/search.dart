@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:recipe/providers/app_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe/providers/counter_provider.dart';
+import 'package:recipe/services/api.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -12,116 +13,95 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
+  final Api _api = Api();
+
   @override
   void initState() {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      Provider.of<CounterProvider>(context, listen: false).listCategories();
-    });
     super.initState();
+    _loadCategories();
+  }
+
+  Future<void> _loadCategories() async {
+    try {
+      final categories = await _api.getCategories();
+      context.read<CounterProvider>().setCategories(categories);
+    } catch (error) {
+      print('Error loading categories: $error');
+    }
+  }
+
+  Future<void> _loadMealsByCategory(String category) async {
+    try {
+      final meals = await _api.getMealsByCategory(category);
+      context.read<CounterProvider>().setMeal(meals);
+    } catch (error) {
+      print('Error loading meals by category: $error');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final categories = context.watch<CounterProvider>().categories ?? [];
+    final selectedMeals = context.watch<CounterProvider>().meals ?? [];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Search"),
       ),
-      body: Column(children: [
-        SizedBox(
-          height: 60,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                // Оберните ваш текущий ListView.builder в SingleChildScrollView
-                ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount:
-                      context.watch<CounterProvider>().categories?.length ?? 0,
-                  itemBuilder: ((context, index) => Padding(
+      body: Column(
+        children: [
+          SizedBox(
+            height: 60,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  for (final category in categories)
+                    GestureDetector(
+                      onTap: () => _loadMealsByCategory(category.strCategory!),
+                      child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             color: Colors.amber,
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              context
-                                      .watch<CounterProvider>()
-                                      .categories?[index]
-                                      .strCategory ??
-                                  '',
-                            ),
+                            child: Text(category.strCategory!),
                           ),
                         ),
-                      )),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    Text('Whet recipe are you looking for today?'),
-                  ],
-                ),
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: Colors.amber,
-                          ),
-                        )
-                      ],
+                      ),
                     ),
-                  ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
-      ]),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () {
-              context.read<AppProvider>().changeTherme(false);
-            },
-            tooltip: 'Light',
-            child: const Icon(Icons.abc),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          FloatingActionButton(
-            onPressed: () {
-              context.read<AppProvider>().changeTherme(true);
-            },
-            tooltip: 'Dark',
-            child: const Icon(Icons.ac_unit),
-          ),
-          const SizedBox(
-            height: 45,
+          Expanded(
+            child: selectedMeals.isNotEmpty
+                ? ListView.builder(
+                    itemCount: selectedMeals.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(selectedMeals[index].strMeal!),
+                        subtitle: Image.network(
+                          '${selectedMeals[index].strMealThumb}/preview',
+                          height: 100.0,
+                          width: 100.0,
+                        ),
+                      );
+                    },
+                  )
+                : Center(
+                    child: Text(
+                      'Выберите категорию блюд',
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                  ),
           ),
         ],
       ),
+      // ... остальной код виджета
     );
   }
 }

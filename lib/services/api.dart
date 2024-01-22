@@ -4,34 +4,37 @@ import '../models/category.dart';
 import '../models/meal.dart';
 
 class Api {
-  final mealURL = 'https://www.themealdb.com/api/json/v1/1/random.php';
-  final categoryURL = 'https://www.themealdb.com/api/json/v1/1/categories.php';
+  final baseUrl = 'https://www.themealdb.com/api/json/v1/1/';
 
-  final dio = Dio();
-
-  Future<List<MealModel>> listMeals() async {
-    Response response;
-    response = await dio.get(mealURL);
-    log(response.data.toString());
-    return parseMealModels(response.data);
+  Future<List<MealModel>> getMealsByCategory(String category) async {
+    try {
+      final response = await Dio().get('$baseUrl/filter.php?c=$category');
+      return parseMeals(response.data);
+    } catch (error) {
+      log('Error fetching meals by category: $error');
+      throw Exception('Failed to load meals by category');
+    }
   }
 
-  List<MealModel> parseMealModels(Map<String, dynamic> json) {
+  List<MealModel> parseMeals(Map<String, dynamic> json) {
     List<dynamic> mealsJson = json['meals'];
     return mealsJson.map((mealJson) => MealModel.fromJson(mealJson)).toList();
   }
 
-  Future<List<CategoryModel>> listCategories() async {
-    Response response;
-    response = await dio.get(categoryURL);
-    log(response.data.toString());
-    return parseCategories(response.data);
+  Future<List<CategoryModel>> getCategories() async {
+    try {
+      final response = await Dio().get('$baseUrl/categories.php');
+      return parseCategories(response.data);
+    } catch (error) {
+      log('Error fetching categories: $error');
+      throw Exception('Failed to load categories');
+    }
   }
 
   List<CategoryModel> parseCategories(Map<String, dynamic> json) {
-    List<dynamic> mealsJson = json['categories'];
-    return mealsJson
-        .map((mealJson) => CategoryModel.fromJson(mealJson))
+    List<dynamic> categoriesJson = json['categories'];
+    return categoriesJson
+        .map((categoryJson) => CategoryModel.fromJson(categoryJson))
         .toList();
   }
 }

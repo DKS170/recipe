@@ -7,7 +7,7 @@ import '../models/category.dart';
 class CounterProvider extends ChangeNotifier {
   Color color = const Color.fromARGB(255, 255, 255, 255);
   double height = 200.0;
-
+  CategoryModel? selectedCategory;
   List<MealModel>? meals;
   List<CategoryModel>? categories;
 
@@ -33,25 +33,27 @@ class CounterProvider extends ChangeNotifier {
     isLoading = value;
   }
 
-  void listCategories() async {
-    List<CategoryModel> data = await Api().listCategories();
-    setCategories(data);
-  }
-
   setCategories(data) {
     categories = data;
     notifyListeners();
   }
 
-  void listMeal() async {
-    setStatus(true);
-    List<MealModel> data = await Api().listMeals();
-    setMeal(data);
-  }
-
   setMeal(data) {
     meals = data;
-    setStatus(false);
     notifyListeners();
+  }
+
+  void setRandomMeal(MealModel meal) {
+    meals = [meal];
+    notifyListeners();
+  }
+
+  List<MealModel>? selectedMeals;
+  void someMethod() {
+    // Правильное использование переменной meals
+    if (meals != null && meals!.isNotEmpty) {
+      // Доступ к элементам meals
+      print(meals![0].strMeal);
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:recipe/home.dart';
 import 'package:recipe/search.dart';
+import 'package:recipe/set1.dart';
 import 'package:recipe/styles/theme_style.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> _buildScreens() => [
         const Home(),
         const Search(),
-        Home(),
+        Set(),
         Home(),
         Home(),
       ];

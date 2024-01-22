@@ -4,6 +4,7 @@ import 'package:recipe/providers/counter_provider.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,6 +100,12 @@ class Home extends StatelessWidget {
                             ],
                           ),
                         ),
+                        const SizedBox(height: 20),
+                        const Text(
+                          'Рецепт дня',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(height: 20),
                         Center(
                           child: AnimatedContainer(
                             color: Theme.of(context).colorScheme.onBackground,
@@ -138,54 +145,6 @@ class Home extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '${context.watch<CounterProvider>().meals?.first.strIngredient1 ?? ''}:',
-                                    ),
-                                    Text(
-                                      context
-                                              .watch<CounterProvider>()
-                                              .meals
-                                              ?.first
-                                              .strMeasure1 ??
-                                          '',
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '${context.watch<CounterProvider>().meals?.first.strIngredient2 ?? ''}:',
-                                    ),
-                                    Text(
-                                      context
-                                              .watch<CounterProvider>()
-                                              .meals
-                                              ?.first
-                                              .strMeasure2 ??
-                                          '',
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '${context.watch<CounterProvider>().meals?.first.strIngredient3 ?? ''}:',
-                                    ),
-                                    Text(
-                                      context
-                                              .watch<CounterProvider>()
-                                              .meals
-                                              ?.first
-                                              .strMeasure3 ??
-                                          '',
-                                    ),
-                                  ],
-                                ),
                               ],
                             ),
                           ),
@@ -198,23 +157,6 @@ class Home extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () {
-              context.read<CounterProvider>().incrementCounter();
-              // context.read<CounterProvider>().getActivity();
-              context.read<CounterProvider>().listMeal();
-            },
-            tooltip: 'Increment',
-            child: const Icon(Icons.add),
-          ),
-          const SizedBox(
-            height: 45,
-          ),
-        ],
       ),
     );
   }
